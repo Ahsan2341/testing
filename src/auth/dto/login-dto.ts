@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginDto {
   @IsString()
@@ -6,4 +6,9 @@ export class LoginDto {
 
   @IsString()
   password: string;
+}
+
+export class GoogleSignInDto {
+  @IsNotEmpty()
+  readonly code: string;
 }

@@ -2,25 +2,50 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 export type UserDocument = HydratedDocument<User>;
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({})
   password: string;
 
   @Prop({ required: true })
   name: string;
 
+  // Add the role field with enum
+  @Prop({
+    type: String,
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
+
   @Prop({})
   profilePicture: string;
+
+  @Prop({})
+  phoneNumber: string;
+
+  @Prop({ default: false })
+  isVerified: boolean;
 
   @Prop({ default: '' })
   googleSignInId: string;
 
   @Prop({ default: false })
   googleSignInEnabled: boolean;
+
+  @Prop({ default: '' })
+  appleSignInId: string;
+
+  @Prop({ default: false })
+  appleSignInEnabled: boolean;
 
   @Prop()
   passwordResetToken: number;
