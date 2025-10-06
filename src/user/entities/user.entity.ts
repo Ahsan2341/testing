@@ -27,6 +27,9 @@ export class User {
   role: UserRole;
 
   @Prop({})
+  aboutMe: string;
+
+  @Prop({})
   profilePicture: string;
 
   @Prop({})
