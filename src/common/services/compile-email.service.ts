@@ -1,7 +1,8 @@
 import handlebars from 'handlebars';
-import mjml2html from 'mjml';
-import fs from 'fs';
-import path from 'path';
+
+import * as fs from 'fs';
+import * as path from 'path';
+import * as mjml2html from "mjml";
 
 type Props = {
   fileName: string;
@@ -22,6 +23,7 @@ export default async function compileEmailTemplate({
     path.join('src/common/mjml-templates', fileName),
     'utf8',
   );
+  
   const template = mjml2html(mjMail).html;
   return handlebars.compile(template)(data).toString();
 }

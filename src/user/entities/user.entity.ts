@@ -71,3 +71,14 @@ UserSchema.pre<UserDocument>('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
+
+UserSchema.pre('findOneAndUpdate', async function (next) {
+  const update = this.getUpdate() as Record<string, any> | null;
+
+  if (update?.password) {
+    const hashed = await bcrypt.hash(update.password, 10);
+    this.setUpdate({ ...update, password: hashed });
+  }
+
+  next();
+});

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from "jsonwebtoken"
-import crypto from "crypto"
+import * as crypto from "crypto"
 
 @Injectable()
 export class AuthService {

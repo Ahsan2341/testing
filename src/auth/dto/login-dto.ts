@@ -12,3 +12,8 @@ export class GoogleSignInDto {
   @IsNotEmpty()
   readonly code: string;
 }
+
+export class AppleSignInDto {
+  @IsString()
+  code: string;
+}
