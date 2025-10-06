@@ -7,6 +7,11 @@ export enum UserRole {
   ADMIN = 'admin',
 }
 
+export enum UserStatus {
+  BANNED = 'banned',
+  ACTIVE = 'active',
+}
+
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
@@ -26,7 +31,14 @@ export class User {
   })
   role: UserRole;
 
-  @Prop({default:""})
+  @Prop({
+    type: String,
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+  })
+  status: UserStatus;
+
+  @Prop({ default: '' })
   aboutMe: string;
 
   @Prop({})
