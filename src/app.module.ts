@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
-import { QueueJobsModule } from './queue-jobs/queue-jobs.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { QueueJobsModule } from './modules/queue-jobs/queue-jobs.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({

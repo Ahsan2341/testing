@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from 'src/user/user.module';
-import { QueueJobsModule } from 'src/queue-jobs/queue-jobs.module';
+import { UserModule } from 'src/modules/user/user.module';
+import { QueueJobsModule } from 'src/modules/queue-jobs/queue-jobs.module';
 import { GoogleAuthService } from './google-auth.service';
 import { JwtAuthService } from 'src/common/services/jwt-auth.service';
 import { AppleAuthService } from './apple-auth.service';

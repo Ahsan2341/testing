@@ -26,7 +26,7 @@ export class User {
   })
   role: UserRole;
 
-  @Prop({})
+  @Prop({default:""})
   aboutMe: string;
 
   @Prop({})

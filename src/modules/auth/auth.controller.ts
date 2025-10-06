@@ -14,16 +14,16 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserService } from 'src/user/user.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UserService } from 'src/modules/user/user.service';
+import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 import { AppleSignInDto, GoogleSignInDto, LoginDto } from './dto/login-dto';
 import { ForgotPasswordDto } from './dto/forgot-password';
 import compileEmailTemplate from 'src/common/services/compile-email.service';
 import {
   QUEUE_JOB_STATUS,
   QUEUE_JOB_TYPE,
-} from 'src/queue-jobs/queue-jobs.constants';
-import { QueueJobsService } from 'src/queue-jobs/queue-jobs.service';
+} from 'src/modules/queue-jobs/queue-jobs.constants';
+import { QueueJobsService } from 'src/modules/queue-jobs/queue-jobs.service';
 import { GoogleAuthService } from './google-auth.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtGuards } from 'src/common/guards/jwt-guards';
@@ -117,7 +117,6 @@ export class AuthController {
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     const user = await this.userService.findOne({
       email: resetPasswordDto.email,
-      passwordResetToken: resetPasswordDto.otp,
     });
 
     if (!user) {
@@ -126,6 +125,9 @@ export class AuthController {
 
     if (Date.now() > user.passwordResetTokenExpiresAt) {
       throw new BadRequestException('OTP Expired');
+    }
+    if (resetPasswordDto.otp !== user.passwordResetToken) {
+      throw new BadRequestException('OTP Incorrect');
     }
 
     await this.userService.findByIdAndUpdate(user._id, {

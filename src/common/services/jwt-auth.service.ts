@@ -1,5 +1,5 @@
 import { Inject, UnauthorizedException } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { promisify } from 'util';
 import * as jwt from 'jsonwebtoken';
 export class JwtAuthService {
