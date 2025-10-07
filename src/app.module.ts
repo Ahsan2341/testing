@@ -7,6 +7,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './modules/auth/auth.module';
 import { QueueJobsModule } from './modules/queue-jobs/queue-jobs.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ListingModule } from './modules/listing/listing.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { ChatGateway } from './modules/chat/chat.gateway';
+import { ChatService } from './modules/chat/chat.service';
+import { ChatController } from './modules/chat/chat.controller';
 
 @Module({
   imports: [
@@ -25,6 +30,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     UserModule,
     AuthModule,
     QueueJobsModule,
+    ListingModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
