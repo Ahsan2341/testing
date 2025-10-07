@@ -14,26 +14,47 @@ export class Listing {
   @Prop({ required: true })
   address: string;
 
-  @Prop({ required: true, default: 1 })
+  @Prop({ required: true })
+  spaceType: string;
+
+  @Prop({})
+  titleInHand: boolean;
+
+  @Prop({})
   bedrooms: number;
 
-  @Prop({ required: true, default: 1 })
+  @Prop({})
   bathrooms: number;
 
   @Prop({ required: true, default: 2200 })
-  area: number;
+  size: number;
 
-  @Prop({ required: true, default: 800 })
+  @Prop({})
   monthlyRent: number;
+
+  @Prop({})
+  salePrice: number;
 
   @Prop({ required: true })
   description: string;
 
+  @Prop({})
+  documentFile: string;
+
   @Prop({ required: true })
   photos: string[];
 
+  @Prop({})
+  video: string;
+
   @Prop({ required: true })
   amenities: string[];
+
+  @Prop({ default: false })
+  aiFlagged: boolean;
+
+  @Prop({})
+  isFurnished: boolean;
 
   @Prop({ required: true, type: Date })
   availableFrom: Date;
@@ -42,4 +63,4 @@ export class Listing {
   user: MongooseSchema.Types.ObjectId;
 }
 
-export const listingSchema = SchemaFactory.createForClass(Listing);
+export const ListingSchema = SchemaFactory.createForClass(Listing);
