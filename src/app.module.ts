@@ -12,6 +12,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { ChatGateway } from './modules/chat/chat.gateway';
 import { ChatService } from './modules/chat/chat.service';
 import { ChatController } from './modules/chat/chat.controller';
+import { MediaModule } from './common/media/media.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ChatController } from './modules/chat/chat.controller';
     QueueJobsModule,
     ListingModule,
     ChatModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

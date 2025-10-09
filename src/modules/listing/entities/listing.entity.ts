@@ -3,6 +3,11 @@ import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { User } from 'src/modules/user/entities/user.entity';
 
 export type ListingDocument = HydratedDocument<Listing>;
+export enum PricingType {
+  FOR_RENT = 'for rent',
+  FOR_SALE = 'for sale',
+}
+
 @Schema({ timestamps: true })
 export class Listing {
   @Prop({ required: true })
@@ -15,10 +20,32 @@ export class Listing {
   address: string;
 
   @Prop({ required: true })
+  city: string;
+
+  @Prop({
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  })
+  location: {
+    type: 'Point';
+    coordinates: [number, number]; // [longitude, latitude] From google maps the convention is [lat, long] but in geoJson the correct way is [long, lat]
+  };
+
+  @Prop({})
   spaceType: string;
 
   @Prop({})
-  titleInHand: boolean;
+  ownershipType: string;
+
+  @Prop({})
+  titleInHand: boolean; // for propertyType land
 
   @Prop({})
   bedrooms: number;
@@ -29,11 +56,21 @@ export class Listing {
   @Prop({ required: true, default: 2200 })
   size: number;
 
+  @Prop({
+    type: String,
+    enum: PricingType,
+    default: PricingType.FOR_RENT,
+  })
+  pricing: PricingType;
+
   @Prop({})
   monthlyRent: number;
 
   @Prop({})
   salePrice: number;
+
+  @Prop({ default: 500 })
+  findersFee: number;
 
   @Prop({ required: true })
   description: string;
@@ -53,8 +90,17 @@ export class Listing {
   @Prop({ default: false })
   aiFlagged: boolean;
 
-  @Prop({})
+  @Prop({ default: false })
   isFurnished: boolean;
+
+  @Prop({ default: false })
+  isPromoted: boolean;
+
+  @Prop({})
+  promotedTill: Date;
+
+  @Prop({ default: false })
+  isVerified: boolean;
 
   @Prop({ required: true, type: Date })
   availableFrom: Date;
@@ -64,3 +110,5 @@ export class Listing {
 }
 
 export const ListingSchema = SchemaFactory.createForClass(Listing);
+// Add 2dsphere index for geospatial queries
+ListingSchema.index({ location: '2dsphere' });

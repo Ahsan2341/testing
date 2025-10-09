@@ -22,6 +22,9 @@ export class ListingController {
   create(@Body() createListingDto: CreateListingDto, @Request() request) {
     const user = request.user;
     console.log(createListingDto);
+    if(createListingDto.isPromoted){
+      // return payment session
+    }
     return this.listingService.create({ ...createListingDto, user: user._id });
   }
   @UseGuards(JwtGuards)
@@ -39,9 +42,9 @@ export class ListingController {
           ([key]) => !['page', 'limit', "minPrice", "maxPrice", "myListing", "location"].includes(key),
         ),
       ),
-      ...(params.minPrice && !params.maxPrice && { monthlyRent: { $gte: Number(params.minPrice) } }),
-      ...(params.maxPrice && !params.minPrice && { monthlyRent: { ...(params.minPrice && { $gte: Number(params.minPrice) }), $lte: Number(params.maxPrice) } }),
-      ...(params.maxPrice && params.minPrice && { monthlyRent: { ...(params.minPrice && { $gte: Number(params.minPrice) }), $lte: Number(params.maxPrice) } }),
+      ...(params.minPrice && !params.maxPrice && { $or:[ { monthlyRent: { $gte: Number(params.minPrice) } }, { salePrice: { $gte: Number(params.minPrice) } } ] }),
+      ...(params.maxPrice && !params.minPrice && { $or:[ { monthlyRent: { $lte: Number(params.maxPrice) } }, { salePrice: { $lte: Number(params.maxPrice) } } ] }),
+      ...(params.maxPrice && params.minPrice && {  $or: [ { $and:[ { monthlyRent: { $lte: Number(params.maxPrice) } }, { monthlyRent: { $gte: Number(params.minPrice)} } ] }, { $and:[ { salePrice: { $lte: Number(params.maxPrice) } }, { salePrice: { $gte: Number(params.minPrice)} } ]} ]  } ),
       ...(params.myListing && {user:user._id}),
       ...(params.amenities && { amenities: { $in: params.amenities.split(",").map(item => item.trim()) }}),
       ...(params.availableFrom && { availableFrom: { $lte: new Date() } }),

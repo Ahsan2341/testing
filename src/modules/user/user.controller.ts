@@ -8,18 +8,20 @@ import {
   Delete,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtGuards } from 'src/common/guards/jwt-guards';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.userService.create(createUserDto);
   }
   @UseGuards(JwtGuards)
   @Get()
@@ -42,6 +44,17 @@ export class UserController {
       ...(email && { email: { $regex: email, $options: 'i' } }),
     };
     console.log(filters);
-    return this.usersService.findAll(filters, limitNum, pageNum);
+    return this.userService.findAll(filters, limitNum, pageNum);
+  }
+  @UseGuards(JwtGuards)
+  @Patch()
+  async updateUser(@Body() updateUserDto: UpdateUserDto, @Request() request) {
+    return this.userService.findByIdAndUpdate(request.user._id, updateUserDto);
+  }
+
+  @UseGuards(JwtGuards)
+  @Get("current-user")
+  async getCurrentUser(@Request() request){
+    return this.userService.findById(request.user._id);
   }
 }

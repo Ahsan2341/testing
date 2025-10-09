@@ -113,6 +113,23 @@ export class AuthController {
     });
     return { message: 'OTP send to your email' };
   }
+
+  @Post('verify-reset-password-otp')
+  async verifyResetPasswordOtp(@Body() body) {
+    const { email, otp } = body;
+    const user = await this.userService.findOne({ email });
+    if (!user) {
+      throw new BadRequestException("User with this email doesn't exist");
+    }
+
+    if (Date.now() > user.passwordResetTokenExpiresAt) {
+      throw new BadRequestException('OTP Expired');
+    }
+    if (otp !== user.passwordResetToken) {
+      throw new BadRequestException('OTP Incorrect');
+    }
+    return { message: 'OTP Verified Successfully', user };
+  }
   @Post('reset-password')
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     const user = await this.userService.findOne({
